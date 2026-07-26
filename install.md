@@ -14,7 +14,7 @@ In this project, the environment and the database are already set.
 - Docker-Engine: 19.03.0+
 - Docker-Compose: 1.27.0+
 
-*Ideally*, make sure to have the very latest versions.
+*Ideally*, make sure to have the latest versions.
 
 ## Instructions
 
