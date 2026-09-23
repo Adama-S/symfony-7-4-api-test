@@ -11,22 +11,27 @@ use Doctrine\Persistence\ObjectManager;
 
 class CocktailFixtures extends Fixture implements OrderedFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $menthe = $this->getReference(
-            IngredientFixtures::MENTHE_REFERENCE
+            IngredientFixtures::MENTHE_REFERENCE,
+            Ingredient::class
         );
         $citronVert = $this->getReference(
-            IngredientFixtures::CITRON_VERT_REFERENCE
+            IngredientFixtures::CITRON_VERT_REFERENCE,
+            Ingredient::class
         );
         $eauGazeuse = $this->getReference(
-            IngredientFixtures::EAU_GAZEUSE_REFERENCE
+            IngredientFixtures::EAU_GAZEUSE_REFERENCE,
+            Ingredient::class
         );
         $fraise = $this->getReference(
-            IngredientFixtures::FRAISE_REFERENCE
+            IngredientFixtures::FRAISE_REFERENCE,
+            Ingredient::class
         );
         $jusAnanas = $this->getReference(
-            IngredientFixtures::JUS_ANANAS_REFERENCE
+            IngredientFixtures::JUS_ANANAS_REFERENCE,
+            Ingredient::class
         );
 
         $mojito= new Cocktail();

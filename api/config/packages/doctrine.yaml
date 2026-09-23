@@ -13,19 +13,7 @@ doctrine:
         mappings:
             App:
                 is_bundle: false
-                type: annotation
+                type: attribute
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
-            Cocktail:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity\Cocktail'
-                alias: Cocktail
-            Ingredient:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity\Ingredient'
-                alias: Ingredient

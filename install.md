@@ -1,59 +1,91 @@
 # Installation
 
-In this project, the environment and the database are already set.
-
-## Environment
-
-- PHP 7.4
-- Symfony 5.2
-- MySQL 8.0
-
 ## Prerequisites
 
-- Git: 2.3+
-- Docker-Engine: 19.03.0+
-- Docker-Compose: 1.27.0+
+- Git
+- Docker Engine 20.10 or newer
+- Docker Compose v2
 
-*Ideally*, make sure to have the latest versions.
+The project runs with PHP 8.2, Symfony 7.4 and MySQL 8 inside Docker. PHP,
+Composer and the Symfony CLI do not need to be installed on the host machine.
 
-## Instructions
+## Setup
 
 1. Clone the repository:
 
-`git clone https://github.com/Adama-S/habitues_api.git --config core.autocrlf=input`
+   ```bash
+   git clone https://github.com/Adama-S/symfony-7-4-api-test.git
+   cd symfony_7_4_api_test
+   ```
 
-2. Switch to the repository folder:
+2. Build and start the containers:
 
-`cd habitues_api`
+   ```bash
+   docker compose up -d --build
+   ```
 
-3. Build and start the containers:
+3. Open a shell in the application container:
 
-`docker-compose up -d --build`
+   ```bash
+   [winpty] docker compose exec app sh
+   ```
 
-If you want to destroy the containers in order to rebuild them right after:
+4. Install the locked PHP dependencies:
 
-`docker-compose down --remove-orphans --volumes`
+   ```bash
+   cd /var/www/html/api
+   composer install
+   ```
 
-4. Connect to the application's container:
+5. Create the database schema and load the development fixtures:
 
-`docker exec -ti app bash`
+   ```bash
+   bin/initialize
+   ```
 
-5. Switch to the application folder:
+   This command drops and recreates the database. Do not run it against
+   production data.
 
-`cd api`
+6. Start the Symfony development server:
 
-6. Install the dependencies:
+   ```bash
+   symfony serve --allow-http --no-tls --listen-ip=0.0.0.0 -d
+   ```
 
-`composer install` or `composer update -W`
+   The API is then available at <http://localhost:8090>.
 
-7. Apply the migrations and the fixtures:
+## API documentation
 
-`bin/initialize`
+Open <http://localhost:8090/api/docs> to view the generated OpenAPI
+documentation.
 
-8. Launch the built-in Symfony server:
+## Useful commands
 
-`symfony serve -d`
+Run these commands from `/var/www/html/api` inside the `app` container:
 
-9. On your web browser, go to:
+```bash
+# Clear the Symfony cache
+php bin/console cache:clear
 
-`http://localhost:8090`
+# Check Doctrine mappings
+php bin/console doctrine:schema:validate
+```
+
+Run this command from the repository root on the host to follow application
+logs:
+
+```bash
+docker compose logs -f app
+```
+
+To stop the containers:
+
+```bash
+docker compose down
+```
+
+To remove the containers and the database volume:
+
+```bash
+docker compose down --remove-orphans --volumes
+```

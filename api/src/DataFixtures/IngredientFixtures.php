@@ -16,7 +16,7 @@ class IngredientFixtures extends Fixture implements OrderedFixtureInterface
     public const FRAISE_REFERENCE = "fraise-ingredient";
     public const JUS_ANANAS_REFERENCE = "jus-ananas-ingredient";
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $menthe = new Ingredient('Menthe');
         $citronVert = new Ingredient('Citron vert');

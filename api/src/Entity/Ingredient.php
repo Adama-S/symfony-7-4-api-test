@@ -2,36 +2,38 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Doctrine\Orm\Filter\PartialSearchFilter;
+use ApiPlatform\Metadata\QueryParameter;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\IngredientRepository;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\IngredientRepository")
- */
+#[ORM\Entity(repositoryClass: IngredientRepository::class)]
+#[ApiResource(
+    parameters: [
+        'name' => new QueryParameter(
+            filter: PartialSearchFilter::class,
+            property: 'name'
+        ),
+    ]
+)]
 class Ingredient
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $name;
+    #[ORM\Column(type: 'string')]
+    private string $name = '';
 
-    /**
-     * @ORM\ManyToMany(
-     *     targetEntity="App\Entity\Cocktail",
-     *     inversedBy="ingredients"
-     * )
-     * @ORM\JoinTable(name="cocktails_ingredients")
-     */
-    private $cocktails;
+    #[ORM\ManyToMany(targetEntity: Cocktail::class, inversedBy: 'ingredients')]
+    #[ORM\JoinTable(name: 'cocktails_ingredients')]
+    private Collection $cocktails;
 
-    public function __construct(String $name)
+    public function __construct(string $name = '')
     {
         $this->name = $name;
         $this->cocktails = new ArrayCollection();
@@ -42,28 +44,17 @@ class Ingredient
         return $this->id;
     }
 
-    /**
-     * @return String
-     */
-    public function getName(): String
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param String $name
-     */
-    public function setName(String $name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * Assign a cocktail to a ingredient
-     *
-     * @param Cocktail $cocktail the cocktail to assign
-     */
-    public function addCocktail(Cocktail $cocktail)
+    public function addCocktail(Cocktail $cocktail): void
     {
         if (!$this->cocktails->contains($cocktail)) {
             $this->cocktails[] = $cocktail;
@@ -71,11 +62,6 @@ class Ingredient
         }
     }
 
-    /**
-     * Converting Ingredient object to array
-     *
-     * @return array
-     */
     public function toArray() : array
     {
         return [
